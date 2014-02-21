@@ -1,0 +1,25 @@
+services:
+    rxu.topic_actions.listener:
+        class: rxu\topic_actions\event\listener
+        arguments:
+            - @config
+            - @dbal.conn
+            - @auth
+            - @template
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+        tags:
+            - { name: event.listener }
+
+    rxu.topic_actions.cron.task.tidy_topics:
+        class: rxu\topic_actions\cron\task\tidy_topics
+        arguments:
+            - @config
+            - @dbal.conn
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+
+        tags:
+            - { name: cron.task }
