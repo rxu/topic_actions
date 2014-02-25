@@ -5,7 +5,7 @@
 *
 * @package language
 * @copyright (c) 2014 Alex Fryschyn (Sherlock)
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2 
 *
 */
 
@@ -73,5 +73,3 @@ $lang = array_merge($lang, array(
 	)
 
 ));
-
-?>
