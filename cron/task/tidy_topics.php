@@ -35,7 +35,7 @@ class tidy_topics extends \phpbb\cron\task\base
 	* @param phpbb_config $config The dbal.conn
 	* @param phpbb_user $user The user
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\user $user, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, $phpbb_root_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->db = $db;
