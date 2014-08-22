@@ -1,6 +1,6 @@
 services:
-    rxu.topic_actions.listener:
-        class: rxu\topic_actions\event\listener
+    rxu.TopicActions.listener:
+        class: rxu\TopicActions\event\listener
         arguments:
             - @config
             - @dbal.conn
@@ -12,8 +12,8 @@ services:
         tags:
             - { name: event.listener }
 
-    rxu.topic_actions.cron.task.tidy_topics:
-        class: rxu\topic_actions\cron\task\tidy_topics
+    rxu.TopicActions.cron.task.tidy_topics:
+        class: rxu\TopicActions\cron\task\tidy_topics
         arguments:
             - @config
             - @dbal.conn

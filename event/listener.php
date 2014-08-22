@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * @package topic_actions
+ * @package TopicActions
  * @copyright (c) 2014 Ruslan Uzdenov (rxu)
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace rxu\topic_actions\event;
+namespace rxu\TopicActions\event;
 
 /**
 * @ignore
@@ -64,7 +64,7 @@ class listener implements EventSubscriberInterface
 
 		if ($action == 'topic_action')
 		{
-			$this->user->add_lang_ext('rxu/topic_actions', 'topic_actions');
+			$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 			$this->user->add_lang(array('viewtopic'));
 
 			$forum_id = (!$quickmod) ? 0 : request_var('f', 0);
@@ -139,7 +139,7 @@ class listener implements EventSubscriberInterface
 	{
 		global $topic_data, $forum_id;
 
-		$this->user->add_lang_ext('rxu/topic_actions', 'topic_actions');
+		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 
 		$this->template->assign_vars(array(
 			'TOPIC_ACTION_SELECT'		=> ($this->auth->acl_get('m_', $forum_id)) ? $this->topic_action_select() : '',
@@ -213,7 +213,7 @@ class listener implements EventSubscriberInterface
 
 	public function topic_action_select($default = 0)
 	{
-		$this->user->add_lang_ext('rxu/topic_actions', 'topic_actions');
+		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 
 		$topic_action_select = '';
 		$actions = array();
@@ -239,7 +239,7 @@ class listener implements EventSubscriberInterface
 
 	public function topic_action_time_select($default = 0)
 	{
-		$this->user->add_lang_ext('rxu/topic_actions', 'topic_actions');
+		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 
 		$topic_action_time_select = '';
 		$actions = array();

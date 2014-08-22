@@ -1,13 +1,13 @@
 <?php
 /**
 *
-* @package topic_actions
+* @package TopicActions
 * @copyright (c) 2014 rxu
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
-namespace rxu\topic_actions\migrations;
+namespace rxu\TopicActions\migrations;
 
 class v_1_0_0 extends \phpbb\db\migration\migration
 {
@@ -77,7 +77,7 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 		$max_order = (int) $this->db->sql_fetchfield('max_order');
 
 		$sql_insert = array(
-			'icons_url' => 'ext/rxu/topic_actions/icon/trash.png',
+			'icons_url' => 'ext/rxu/TopicActions/icon/trash.png',
 			'icons_width' => 16,
 			'icons_height' => 16,
 			'icons_order' => $max_order + 1,

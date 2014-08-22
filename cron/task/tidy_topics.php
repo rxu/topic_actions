@@ -1,13 +1,13 @@
 <?php
 /**
 *
-* @package topic_actions
+* @package TopicActions
 * @copyright (c) 2014 Ruslan Uzdenov (rxu)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-namespace rxu\topic_actions\cron\task;
+namespace rxu\TopicActions\cron\task;
 
 /**
 * @ignore
@@ -20,7 +20,7 @@ if (!defined('IN_PHPBB'))
 /**
 * Tidy topics cron task.
 *
-* @package topic_actions
+* @package TopicActions
 */
 class tidy_topics extends \phpbb\cron\task\base
 {
@@ -72,7 +72,7 @@ class tidy_topics extends \phpbb\cron\task\base
 	{
 		$current_time = time();
 
-		$this->user->add_lang_ext('rxu/topic_actions', 'topic_actions');
+		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 
 		$actions = $topics_list = array();
 		if(sizeof($this->user->lang['TOPIC_ACTION']['TYPE']))
