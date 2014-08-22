@@ -10,14 +10,6 @@
 namespace rxu\TopicActions\event;
 
 /**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-    exit;
-}
-
-/**
 * Event listener
 */
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,17 +18,20 @@ class listener implements EventSubscriberInterface
 {
 	public $flag;
 
-    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
-    {
-        $this->template = $template;
-        $this->user = $user;
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, \phpbb\request\request_interface $request, \phpbb\content_visibility $content_visibility, \phpbb\log\log $phpbb_log, $phpbb_root_path, $php_ext)
+	{
+		$this->template = $template;
+		$this->user = $user;
 		$this->auth = $auth;
 		$this->db = $db;
 		$this->config = $config;
+		$this->request = $request;
+		$this->content_visibility = $content_visibility;
+		$this->phpbb_log = $phpbb_log;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 		$this->flag = false;
-    }
+	}
 
 	static public function getSubscribedEvents()
 	{
@@ -53,8 +48,6 @@ class listener implements EventSubscriberInterface
 	public function action_type($event)
 	{
 		$module = $event['module'];
-//		$action = $event['action'];
-//		$break = $event['break'];
 		$module->load('mcp', 'main', 'quickmod');
 	}
 
@@ -67,11 +60,11 @@ class listener implements EventSubscriberInterface
 			$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 			$this->user->add_lang(array('viewtopic'));
 
-			$forum_id = (!$quickmod) ? 0 : request_var('f', 0);
-			$topic_id = (!$quickmod) ? 0 : request_var('t', 0);
-			$topic_action = request_var('topic_action', '');
-			$topic_action_time = request_var('topic_action_time', -1);
-			$delete_action = request_var('delete_action', false);
+			$forum_id = (!$quickmod) ? 0 : $this->request->variable('f', 0);
+			$topic_id = (!$quickmod) ? 0 : $this->request->variable('t', 0);
+			$topic_action = $this->request->variable('topic_action', '');
+			$topic_action_time = $this->request->variable('topic_action_time', -1);
+			$delete_action = $this->request->variable('delete_action', false);
 
 			$time_is_set = $tidy_result = false;
 
@@ -96,11 +89,11 @@ class listener implements EventSubscriberInterface
 					trigger_error($this->user->lang['TOPIC_ACTION']['NO_TIME_SET']);
 				}
 				else if($topic_action_time > 0)
-				{	
+				{
 					if ($topic_action == 'RECYCLE_LOCK')
 					{
 						$this->lock_topic('lock', $topic_id);
-					}					
+					}
 					$time_is_set = $this->set_topic_action_time($topic_action, $topic_action_time, $topic_id);
 				}
 				else if($topic_action_time == 0)
@@ -112,12 +105,12 @@ class listener implements EventSubscriberInterface
 							$this->set_topic_action_time('', 0, $topic_id);
 							$this->soft_delete_topics($topic_id);
 						break;
-						
+
 						case 'DELETE':
 							$this->set_topic_action_time('', 0, $topic_id);
 							delete_topics('topic_id', $topic_id);
 						break;
-						
+
 						default:
 						break;
 					}
@@ -135,16 +128,17 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	public function template_assign_vars()
+	public function template_assign_vars($event)
 	{
-		global $topic_data, $forum_id;
+		$topic_data = $event['topic_data'];
+		$forum_id = $event['forum_id'];
 
 		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 
 		$this->template->assign_vars(array(
 			'TOPIC_ACTION_SELECT'		=> ($this->auth->acl_get('m_', $forum_id)) ? $this->topic_action_select() : '',
 			'TOPIC_ACTION_TIME_SELECT'	=> ($this->auth->acl_get('m_', $forum_id)) ? $this->topic_action_time_select() : '',
-			'TOPIC_ACTION_TIME'			=> ($topic_data['topic_action_time'] && ($topic_data['topic_action_time'] > $this->config['topics_last_gc'])) ? sprintf($this->user->lang['TOPIC_ACTION']['DELAY_EXPLAIN'], $this->user->lang['TOPIC_ACTION']['TYPE'][$topic_data['topic_action_type']], $this->user->format_date($topic_data['topic_action_time'])) : '', 			
+			'TOPIC_ACTION_TIME'			=> ($topic_data['topic_action_time'] && ($topic_data['topic_action_time'] > $this->config['topics_last_gc'])) ? sprintf($this->user->lang['TOPIC_ACTION']['DELAY_EXPLAIN'], $this->user->lang['TOPIC_ACTION']['TYPE'][$topic_data['topic_action_type']], $this->user->format_date($topic_data['topic_action_time'])) : '',
 		));
 	}
 
@@ -153,8 +147,6 @@ class listener implements EventSubscriberInterface
 	*/
 	function soft_delete_topics($topic_ids, $soft_delete_reason = '', $action = 'delete_topic')
 	{
-		global $phpbb_container;
-
 		$success_msg = (sizeof($topic_ids) == 1) ? 'TOPIC_DELETED_SUCCESS' : 'TOPICS_DELETED_SUCCESS';
 
 		if (!is_array($topic_ids))
@@ -168,11 +160,10 @@ class listener implements EventSubscriberInterface
 			// Only soft delete non-shadow topics
 			if (!$row['topic_moved_id'])
 			{
-				$phpbb_content_visibility = $phpbb_container->get('content.visibility');
-				$return = $phpbb_content_visibility->set_topic_visibility(ITEM_DELETED, $topic_id, $row['forum_id'], $this->user->data['user_id'], time(), $soft_delete_reason);
+				$return = $this->content_visibility->set_topic_visibility(ITEM_DELETED, $topic_id, $row['forum_id'], $this->user->data['user_id'], time(), $soft_delete_reason);
 				if (!empty($return))
 				{
-					add_log('mod', $row['forum_id'], $topic_id, 'LOG_SOFTDELETE_TOPIC', $row['topic_title'], $row['topic_first_poster_name']);
+					$this->phpbb_log->add('mod', $this->user_data['user_id'], $this->user->ip, 'LOG_SOFTDELETE_TOPIC', array('forum_id' => $row['forum_id'], 'topic_id' => $topic_id, 'topic_title' => $row['topic_title'], 'topic_first_poster_name' => $row['topic_first_poster_name']));
 				}
 			}
 		}
@@ -202,7 +193,7 @@ class listener implements EventSubscriberInterface
 
 		$sql = 'UPDATE ' . TOPICS_TABLE . ' SET  ' . $this->db->sql_build_array('UPDATE', $sql_ary) . ' 
 			WHERE topic_id = ' . $topic_id;
-		
+
 		if($this->db->sql_query($sql))
 		{
 			return $sql_ary;
@@ -226,7 +217,7 @@ class listener implements EventSubscriberInterface
 			return false;
 		}
 
-		foreach($actions as $key=>$action)
+		foreach($actions as $key => $action)
 		{
 			$selected = ($key == $default) ? ' selected="selected"' : '';
 			$topic_action_select .= '<option value="' . $action . '"' . $selected . '>' . $this->user->lang['TOPIC_ACTION']['TYPE'][$action] . '</option>';
@@ -251,8 +242,8 @@ class listener implements EventSubscriberInterface
 		{
 			return false;
 		}
-		
-		foreach($actions as $key=>$days)
+
+		foreach($actions as $key => $days)
 		{
 			$selected = ($key == $default) ? ' selected="selected"' : '';
 			$topic_action_time_select .= '<option value="' . $days . '"' . $selected . '>' . $this->user->lang['TOPIC_ACTION']['TIME'][$days] . '</option>';
@@ -316,7 +307,7 @@ class listener implements EventSubscriberInterface
 
 		foreach ($data as $id => $row)
 		{
-			add_log('mod', $row['forum_id'], $row['topic_id'], 'LOG_' . strtoupper($action), $row['topic_title']);
+			$this->phpbb_log->add('mod', $this->user->data['user_id'], $this->user_ip, 'LOG_' . strtoupper($action), array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'topic_title' => $row['topic_title']));
 		}
 	}
 

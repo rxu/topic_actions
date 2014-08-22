@@ -1,5 +1,5 @@
 {
-    "name": "rxu/topic_actions",
+    "name": "rxu/TopicActions",
     "type": "phpbb-extension",
     "description": "Allows to schedule some topic actions like recycling or deletion.",
     "homepage": "http://www.phpbbguru.net",

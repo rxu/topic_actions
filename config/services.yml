@@ -7,6 +7,9 @@ services:
             - @auth
             - @template
             - @user
+            - @request
+            - @content.visibility
+            - @log
             - %core.root_path%
             - %core.php_ext%
         tags:
@@ -18,8 +21,9 @@ services:
             - @config
             - @dbal.conn
             - @user
+            - @content.visibility
+            - @log
             - %core.root_path%
             - %core.php_ext%
-
         tags:
             - { name: cron.task }

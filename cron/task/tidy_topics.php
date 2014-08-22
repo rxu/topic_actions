@@ -10,14 +10,6 @@
 namespace rxu\TopicActions\cron\task;
 
 /**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
-/**
 * Tidy topics cron task.
 *
 * @package TopicActions
@@ -35,11 +27,13 @@ class tidy_topics extends \phpbb\cron\task\base
 	* @param phpbb_config $config The dbal.conn
 	* @param phpbb_user $user The user
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\content_visibility $content_visibility, \phpbb\log\log $phpbb_log, $phpbb_root_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->user = $user;
+		$this->content_visibility = $content_visibility;
+		$this->phpbb_log = $phpbb_log;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 	}
@@ -51,7 +45,7 @@ class tidy_topics extends \phpbb\cron\task\base
 	*/
 	public function run()
 	{
-		$this->tidy_topics();
+		$this->cron_tidy_topics();
 	}
 
 	/**
@@ -68,7 +62,7 @@ class tidy_topics extends \phpbb\cron\task\base
 		return $this->config['topics_last_gc'] < time() - $this->config['topics_gc'];
 	}
 
-	public function tidy_topics($topic_ids = array())
+	public function cron_tidy_topics($topic_ids = array())
 	{
 		$current_time = time();
 
@@ -121,7 +115,7 @@ class tidy_topics extends \phpbb\cron\task\base
 				}
 			}
 		}
-		set_config('topics_last_gc', $current_time, true);
+		$this->config->set('topics_last_gc', $current_time, true);
 	}
 
 	/**
@@ -129,8 +123,6 @@ class tidy_topics extends \phpbb\cron\task\base
 	*/
 	function soft_delete_topics($topic_ids, $soft_delete_reason = '', $action = 'delete_topic')
 	{
-		global $phpbb_container;
-
 		$success_msg = (sizeof($topic_ids) == 1) ? 'TOPIC_DELETED_SUCCESS' : 'TOPICS_DELETED_SUCCESS';
 
 		$sql = 'SELECT topic_id, forum_id, topic_title, topic_first_poster_name, topic_moved_id 
@@ -144,11 +136,10 @@ class tidy_topics extends \phpbb\cron\task\base
 			// Only soft delete non-shadow topics
 			if (!$row['topic_moved_id'])
 			{
-				$phpbb_content_visibility = $phpbb_container->get('content.visibility');
-				$return = $phpbb_content_visibility->set_topic_visibility(ITEM_DELETED, $topic_id, $row['forum_id'], $this->user->data['user_id'], time(), $soft_delete_reason);
+				$return = $this->content_visibility->set_topic_visibility(ITEM_DELETED, $topic_id, $row['forum_id'], $this->user->data['user_id'], time(), $soft_delete_reason);
 				if (!empty($return))
 				{
-					add_log('mod', $row['forum_id'], $topic_id, 'LOG_SOFTDELETE_TOPIC', $row['topic_title'], $row['topic_first_poster_name']);
+					$this->phpbb_log->add('mod', $this->user->data['user_id'], $this->user->ip, 'LOG_SOFTDELETE_TOPIC', time(), array('forum_id' => $row['forum_id'], 'topic_id' => $topic_id, 'topic_title' => $row['topic_title'], 'topic_first_poster_name' => $row['topic_first_poster_name']));
 				}
 			}
 		}

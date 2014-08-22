@@ -98,7 +98,7 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 		$result = $this->db->sql_query($sql);
 		$icon_id = (int) $this->db->sql_fetchfield('icons_id');
 		$this->db->sql_freeresult($result);
-		
+
 		if ($icon_id)
 		{
 			$sql = 'DELETE FROM ' . ICONS_TABLE . ' WHERE icons_id = ' . $icon_id;
