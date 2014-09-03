@@ -163,7 +163,7 @@ class listener implements EventSubscriberInterface
 				$return = $this->content_visibility->set_topic_visibility(ITEM_DELETED, $topic_id, $row['forum_id'], $this->user->data['user_id'], time(), $soft_delete_reason);
 				if (!empty($return))
 				{
-					$this->phpbb_log->add('mod', $this->user_data['user_id'], $this->user->ip, 'LOG_SOFTDELETE_TOPIC', array('forum_id' => $row['forum_id'], 'topic_id' => $topic_id, 'topic_title' => $row['topic_title'], 'topic_first_poster_name' => $row['topic_first_poster_name']));
+					$this->phpbb_log->add('mod', $this->user_data['user_id'], $this->user->ip, 'LOG_SOFTDELETE_TOPIC', false, array('forum_id' => $row['forum_id'], 'topic_id' => $topic_id, 'topic_title' => $row['topic_title'], 'topic_first_poster_name' => $row['topic_first_poster_name']));
 				}
 			}
 		}
@@ -281,7 +281,7 @@ class listener implements EventSubscriberInterface
 
 		$orig_ids = $ids;
 
-		if (!check_ids($ids, $table, $sql_id, array('m_lock')))
+		if (!phpbb_check_ids($ids, $table, $sql_id, array('m_lock')))
 		{
 			// Make sure that for f_user_lock only the lock action is triggered.
 			if ($action != 'lock')
@@ -291,7 +291,7 @@ class listener implements EventSubscriberInterface
 
 			$ids = $orig_ids;
 
-			if (!check_ids($ids, $table, $sql_id, array('f_user_lock')))
+			if (!phpbb_check_ids($ids, $table, $sql_id, array('f_user_lock')))
 			{
 				return;
 			}
@@ -303,11 +303,11 @@ class listener implements EventSubscriberInterface
 			WHERE ' . $this->db->sql_in_set($sql_id, $ids);
 		$this->db->sql_query($sql);
 
-		$data = ($action == 'lock' || $action == 'unlock') ? get_topic_data($ids) : get_post_data($ids);
+		$data = ($action == 'lock' || $action == 'unlock') ? phpbb_get_topic_data($ids) : phpbb_get_post_data($ids);
 
 		foreach ($data as $id => $row)
 		{
-			$this->phpbb_log->add('mod', $this->user->data['user_id'], $this->user_ip, 'LOG_' . strtoupper($action), array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'topic_title' => $row['topic_title']));
+			$this->phpbb_log->add('mod', $this->user->data['user_id'], $this->user->ip, 'LOG_' . strtoupper($action), false, array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'topic_title' => $row['topic_title']));
 		}
 	}
 
