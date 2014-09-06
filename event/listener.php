@@ -153,7 +153,7 @@ class listener implements EventSubscriberInterface
 		{
 			$topic_ids = array($topic_ids);
 		}
-		$data = get_topic_data($topic_ids);
+		$data = phpbb_get_topic_data($topic_ids);
 
 		foreach ($data as $topic_id => $row)
 		{
@@ -163,7 +163,7 @@ class listener implements EventSubscriberInterface
 				$return = $this->content_visibility->set_topic_visibility(ITEM_DELETED, $topic_id, $row['forum_id'], $this->user->data['user_id'], time(), $soft_delete_reason);
 				if (!empty($return))
 				{
-					$this->phpbb_log->add('mod', $this->user_data['user_id'], $this->user->ip, 'LOG_SOFTDELETE_TOPIC', false, array('forum_id' => $row['forum_id'], 'topic_id' => $topic_id, 'topic_title' => $row['topic_title'], 'topic_first_poster_name' => $row['topic_first_poster_name']));
+					$this->phpbb_log->add('mod', $this->user->data['user_id'], $this->user->ip, 'LOG_SOFTDELETE_TOPIC', false, array('forum_id' => $row['forum_id'], 'topic_id' => $topic_id, 'topic_title' => $row['topic_title'], 'topic_first_poster_name' => $row['topic_first_poster_name']));
 				}
 			}
 		}
