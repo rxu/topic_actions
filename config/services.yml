@@ -25,5 +25,7 @@ services:
             - @log
             - %core.root_path%
             - %core.php_ext%
+        calls:
+            - [set_name, [cron.task.core.rxu_tidy_topics]]
         tags:
             - { name: cron.task }
