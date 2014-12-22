@@ -1,11 +1,10 @@
 <?php
-/** 
+/**
 *
-* topic_actions [Ukrainian]
+* Topic Actions extension for the phpBB Forum Software package.
 *
-* @package language
-* @copyright (c) 2014 Alex Fryschyn (Sherlock)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2 
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 

@@ -1,11 +1,12 @@
 <?php
 /**
- *
- * @package TopicActions
- * @copyright (c) 2014 Ruslan Uzdenov (rxu)
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
- */
+*
+* Topic Actions extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
+*
+*/
 
 namespace rxu\TopicActions\event;
 
