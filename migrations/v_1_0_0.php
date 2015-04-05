@@ -95,7 +95,7 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 	{
 		global $cache;
 
-		$sql = 'SELECT icons_id FROM ' . ICONS_TABLE . ' WHERE icons_url ' . $this->db->sql_like_expression($this->db->any_char . 'trash.png');
+		$sql = 'SELECT icons_id FROM ' . ICONS_TABLE . ' WHERE icons_url ' . $this->db->sql_like_expression($this->db->get_any_char() . 'trash.png');
 		$result = $this->db->sql_query($sql);
 		$icon_id = (int) $this->db->sql_fetchfield('icons_id');
 		$this->db->sql_freeresult($result);
