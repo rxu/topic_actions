@@ -4,12 +4,10 @@ services:
         arguments:
             - @config
             - @dbal.conn
-            - @auth
             - @template
             - @user
             - @request
-            - @content.visibility
-            - @log
+            - @rxu.TopicActions.manager
             - %core.root_path%
             - %core.php_ext%
         tags:
@@ -21,11 +19,93 @@ services:
             - @config
             - @dbal.conn
             - @user
-            - @content.visibility
-            - @log
-            - %core.root_path%
-            - %core.php_ext%
+            - @rxu.TopicActions.manager
         calls:
             - [set_name, [cron.task.core.rxu_tidy_topics]]
         tags:
             - { name: cron.task }
+
+    rxu.TopicActions.manager:
+        class: rxu\TopicActions\functions\manager
+        arguments:
+            - @rxu.TopicActions.actions_collection
+            - @user
+
+# ----- Topic actions -----
+    rxu.TopicActions.actions_collection:
+        class: phpbb\di\service_collection
+        arguments:
+            - @service_container
+        tags:
+            - { name: service_collection, tag: rxu.TopicActions.action }
+
+    rxu.TopicActions.action.trash:
+        class: rxu\TopicActions\functions\action\trash
+        arguments:
+            - @auth
+            - @content.visibility
+            - @log
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+        calls:
+            - [set_name, [trash]]
+        tags:
+            - { name: rxu.TopicActions.action }
+
+    rxu.TopicActions.action.trash_lock:
+        class: rxu\TopicActions\functions\action\trash_lock
+        arguments:
+            - @auth
+            - @content.visibility
+            - @log
+            - @user
+            - @dbal.conn
+            - %core.root_path%
+            - %core.php_ext%
+        calls:
+            - [set_name, [trash_lock]]
+        tags:
+            - { name: rxu.TopicActions.action }
+
+    rxu.TopicActions.action.delete:
+        class: rxu\TopicActions\functions\action\delete
+        arguments:
+            - @auth
+            - @content.visibility
+            - @log
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+        calls:
+            - [set_name, [delete]]
+        tags:
+            - { name: rxu.TopicActions.action }
+
+    rxu.TopicActions.action.lock:
+        class: rxu\TopicActions\functions\action\lock
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @log
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+        calls:
+            - [set_name, [lock]]
+        tags:
+            - { name: rxu.TopicActions.action }
+
+    rxu.TopicActions.action.unlock:
+        class: rxu\TopicActions\functions\action\unlock
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @log
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+        calls:
+            - [set_name, [unlock]]
+        tags:
+            - { name: rxu.TopicActions.action }

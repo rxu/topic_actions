@@ -1,16 +1,15 @@
 <?php
 /**
-*
-* Topic Actions extension for the phpBB Forum Software package.
-*
-* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
-* @license GNU General Public License, version 2 (GPL-2.0)
-*
-*/
+ *
+ * @package       Topic Actions
+ * @copyright (c) 2013 - 2016 rxu and LavIgor
+ * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 /**
-* DO NOT CHANGE
-*/
+ * DO NOT CHANGE
+ */
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -34,41 +33,50 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-
-	'TOPIC_ACTION'	=> array(
-		'NOT_ENOUGH_PARAMS'	=> 'Недостаточно параметров.',
-		'NO_ACTION_SELECTED'=> 'Не выбрано желаемое действие.',
-		'NO_TIME_SET'		=> 'Действие не было запланировано.',
-		'DELAY'				=> 'Время выполнения действия.',
-		'DELAY_EXPLAIN'		=> 'Запланировано действие с темой: %1$s на время: %2$s',
-		'SELECT_ACTION'		=> 'Выбрать действие',
-		'DELETE_ACTION'		=> 'Удалить действие',
-		'TOPIC_ACTION_PERFORMED'=> 'Действие было выполнено успешно.',
-		'TOPIC_ACTION_SET'	=> 'Время действия с темой было установлено успешно.',
-		'TOPIC_ACTION_DELETED'	=> 'Время действия с темой было удалено успешно.',
-		'TIME'				=> array(
-			'0'		=> 'Сейчас',
-			'1'		=> 'через 1 день',
-			'3'		=> 'через 3 дня',
-			'5'		=> 'через 5 дней',
-			'7' 	=> 'через 7 дней',
-			'14'	=> 'через 2 недели',
-			'30'	=> 'через 1 месяц'
+	'SCHEDULE_TOPIC_ACTION'      => 'Запланировать действие с темой',
+	'SELECT_ACTION'              => 'Выбрать действие',
+	'DELETE_ACTION'              => 'Удалить действие',
+	'TOPIC_ACTION_ERROR'         => 'Запрошенное действие не может быть выполнено.',
+	'TOPIC_ACTION_PERFORMED'     => 'Действие было выполнено успешно.',
+	'TOPIC_ACTION_NO_PERMISSION' => 'У вас нет соответствующих прав доступа для выполнения запрошенного действия.',
+	'TOPIC_ACTION_SET'           => 'Время действия с темой было установлено успешно.',
+	'TOPIC_ACTION_DELETED'       => 'Время действия с темой было удалено успешно.',
+	'NO_ACTION_SELECTED'         => 'Не выбрано желаемое действие.',
+	'NO_TIME_SET'                => 'Действие не было запланировано.',
+	'TOPIC_ACTION'               => array(
+		'NOT_ENOUGH_PARAMS' => 'Недостаточно параметров.',
+		'DELAY'             => 'Время выполнения действия.',
+		'DELAY_EXPLAIN'     => 'Тема запланирована к %1$s на время: %2$s',
+		'TIME'              => array(
+			'0'  => 'Сейчас',
+			'1'  => 'через 1 день',
+			'3'  => 'через 3 дня',
+			'5'  => 'через 5 дней',
+			'7'  => 'через 7 дней',
+			'14' => 'через 2 недели',
+			'30' => 'через 1 месяц'
 		),
-		'TYPE'	=> array(
-			'RECYCLE'		=> 'Поместить в корзину',
-			'RECYCLE_LOCK'	=> 'Поместить в корзину (закрыть)',
-			'DELETE'		=> 'Удалить',
-/*			'FORK'			=> 'Копировать',
-			'LOCK'			=> 'Закрыть',
-			'UNLOCK'		=> 'Открыть',
-			'CHANGE_TYPE'	=> array(
-				'MAKE_ANNOUNCE'	=> 'Сделать объявлением',
-				'MAKE_GLOBAL'	=> 'Сделать важной',
-				'MAKE_STICKY'	=> 'Сделать прилепленной',
-				'MAKE_NORMAL'	=> 'Сделать обычной'
-			)
-*/		)
-	)
-
+		'TYPE'              => array(
+			'RECYCLE'      => 'Поместить в корзину',
+			'RECYCLE_LOCK' => 'Закрыть сейчас и запланировать удаление в корзину',
+			'DELETE'       => 'Удалить',
+			'LOCK'         => 'Закрыть',
+			'UNLOCK'       => 'Открыть',
+			/*			'FORK'			=> 'Копировать',
+						'CHANGE_TYPE'	=> array(
+							'MAKE_ANNOUNCE'	=> 'Сделать объявлением',
+							'MAKE_GLOBAL'	=> 'Сделать важной',
+							'MAKE_STICKY'	=> 'Сделать прилепленной',
+							'MAKE_NORMAL'	=> 'Сделать обычной'
+						)
+			*/
+		),
+		'TYPE_NOTICE'       => array(
+			'trash'      => 'удалению в корзину',
+			'trash_lock' => 'удалению в корзину',
+			'delete'     => 'удалению',
+			'lock'       => 'закрытию',
+			'unlock'     => 'открытию',
+		),
+	),
 ));

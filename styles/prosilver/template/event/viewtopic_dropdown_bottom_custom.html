@@ -1,0 +1,22 @@
+<!-- IF TOPIC_ACTION_SELECT -->
+<div class="dropdown-container dropdown-container-{S_CONTENT_FLOW_BEGIN} dropdown-up dropdown-{S_CONTENT_FLOW_END} dropdown-button-control topic-tools"
+     id="quickmod_schedule">
+	<span title="{L_SCHEDULE_TOPIC_ACTION}"
+	      class="dropdown-trigger button icon-button responsive-menu-link dropdown-select"></span>
+	<div class="dropdown hidden">
+		<div class="pointer">
+			<div class="pointer-inner"></div>
+		</div>
+		<div class="dropdown-contents">
+			<form id="topic_actions" method="post" action="{S_MOD_ACTION}" style="clear: both; padding: 10px 5px;">
+				<fieldset class="quickmod" style="width: auto">
+					<label>{L_SELECT_ACTION}{L_COLON}</label> {TOPIC_ACTION_SELECT} {TOPIC_ACTION_TIME_SELECT}
+					<input type="submit" name="submit" value="{L_GO}" class="button2"/><input type="hidden"
+					                                                                          name="action"
+					                                                                          value="topic_action"/>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- ENDIF -->
