@@ -45,8 +45,7 @@ class manager
 	}
 
 	/**
-	 * Loads actions given by name, checks permissions
-	 * and puts them into $this->actions.
+	 * Loads actions given by name and puts them into $this->actions.
 	 *
 	 * @param array|\Traversable $actions Array of instances of \rxu\TopicActions\functions\action\base
 	 *
@@ -159,11 +158,11 @@ class manager
 	}
 
 	/**
-	 * Find all actions and return their names.
+	 * Find all permitted actions and return their names.
 	 *
 	 * @param int $topic_id Topic ID
 	 * @param int $forum_id Forum ID (can be optional)
-	 * @return array List of the names of all actions
+	 * @return array List of the names of all permitted actions
 	 */
 	public function get_actions($topic_id, $forum_id = 0)
 	{
