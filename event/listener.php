@@ -31,7 +31,7 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var \phpbb\request\request */
+	/** @var \phpbb\request\request_interface */
 	protected $request;
 
 	/** @var \rxu\TopicActions\functions\manager */
@@ -251,22 +251,24 @@ class listener implements EventSubscriberInterface
 		return $topic_action_time_select;
 	}
 
-	public function modify_icon_path_viewtopic($event)
+	private function modify_icon_path($topicrow)
 	{
-		$topicrow = $event['topic_row'];
 		if (isset($topicrow['TOPIC_ICON_IMG']) && strpos($topicrow['TOPIC_ICON_IMG'], 'trash.png'))
 		{
 			$this->flag = true;
 		}
 	}
 
+	public function modify_icon_path_viewtopic($event)
+	{
+		$topicrow = $event['topic_row'];
+		$this->modify_icon_path($topicrow);
+	}
+
 	public function modify_icon_path_search($event)
 	{
 		$topicrow = $event['tpl_ary'];
-		if (isset($topicrow['TOPIC_ICON_IMG']) && strpos($topicrow['TOPIC_ICON_IMG'], 'trash.png'))
-		{
-			$this->flag = true;
-		}
+		$this->modify_icon_path($topicrow);
 	}
 
 	public function modify_header()

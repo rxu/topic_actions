@@ -13,8 +13,6 @@ namespace rxu\TopicActions\functions;
  * Topic actions manager class.
  *
  * Finds installed topic actions, stores action objects, provides action selection.
- *
- * @todo: Check for missing actions.
  */
 class manager
 {
@@ -91,6 +89,11 @@ class manager
 	{
 		$action = $this->find_action($name);
 
+		if (!$action)
+		{
+			return $this->user->lang('TOPIC_ACTION_ERROR');
+		}
+
 		if (!$action->check_auth($forum_id, $topic_id))
 		{
 			$this->had_errors = true;
@@ -119,6 +122,11 @@ class manager
 	{
 		$action = $this->find_action($name);
 
+		if (!$action)
+		{
+			return $this->user->lang('TOPIC_ACTION_ERROR');
+		}
+
 		if (!$action->perform($forum_id, $topic_id))
 		{
 			$this->had_errors = true;
@@ -140,6 +148,11 @@ class manager
 	public function perform_preliminary($name, $topic_id, $forum_id = 0)
 	{
 		$action = $this->find_action($name);
+
+		if (!$action)
+		{
+			return $this->user->lang('TOPIC_ACTION_ERROR');
+		}
 
 		if (!$action->check_auth($forum_id, $topic_id))
 		{
