@@ -35,16 +35,17 @@ class scheduler
 	}
 
 	/**
-	 * Set Topic action time
+	 * Set Topic action time (also checks for permissions).
 	 *
-	 * @param string   $action   The requested action
-	 * @param int      $time     The requested schedule time
-	 * @param int|bool $topic_id Topic ID
+	 * @param string $action   The requested action
+	 * @param int    $time     The requested schedule time
+	 * @param int    $topic_id Topic ID
+	 * @param int    $forum_id Forum ID
 	 * @return string|false
 	 */
-	public function set_topic_action_time($action = '', $time = 0, $topic_id = false)
+	public function set_topic_action_time($action = '', $time = 0, $topic_id = 0, $forum_id = 0)
 	{
-		if (!$topic_id)
+		if (!$topic_id || ($action && !$this->manager->check_auth($action, $topic_id, $forum_id)))
 		{
 			return false;
 		}

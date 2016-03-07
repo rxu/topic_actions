@@ -130,7 +130,7 @@ class listener implements EventSubscriberInterface
 			}
 			else if ($topic_action_time > 0)
 			{
-				if ($this->scheduler->set_topic_action_time($topic_action, $topic_action_time, $topic_id))
+				if ($this->scheduler->set_topic_action_time($topic_action, $topic_action_time, $topic_id, $forum_id))
 				{
 					$message .= $this->user->lang('TOPIC_ACTION_SET');
 				}

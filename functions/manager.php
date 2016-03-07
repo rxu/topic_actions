@@ -78,6 +78,51 @@ class manager
 	}
 
 	/**
+	 * Checks permissions for the specified action.
+	 * Also checks whether the requested action exists.
+	 * This helper function can also be used to return the action object.
+	 *
+	 * @param string $name     Name of the action
+	 * @param int    $topic_id Topic ID
+	 * @param int    $forum_id Forum ID (can be optional)
+	 * @param bool   $check    True if we need to check only,
+	 *                         false to return the action if checks passed
+	 * @return bool|string|\rxu\TopicActions\functions\action\base
+	 */
+	protected function _check_auth($name, $topic_id, $forum_id = 0, $check = false)
+	{
+		$action = $this->find_action($name);
+
+		if (!$action)
+		{
+			$this->had_errors = true;
+			return $this->user->lang('TOPIC_ACTION_ERROR');
+		}
+
+		if (!$action->check_auth($forum_id, $topic_id))
+		{
+			$this->had_errors = true;
+			return $this->user->lang('TOPIC_ACTION_NO_PERMISSION');
+		}
+
+		return ($check) ? true : $action;
+	}
+
+	/**
+	 * Checks permissions for the specified action.
+	 * Also checks whether the requested action exists.
+	 *
+	 * @param string $name     Name of the action
+	 * @param int    $topic_id Topic ID
+	 * @param int    $forum_id Forum ID (can be optional)
+	 * @return bool|string
+	 */
+	public function check_auth($name, $topic_id, $forum_id = 0)
+	{
+		return $this->_check_auth($name, $topic_id, $forum_id, true);
+	}
+
+	/**
 	 * Performs the action with the specified name.
 	 *
 	 * @param string $name     Name of the action
@@ -87,17 +132,12 @@ class manager
 	 */
 	public function perform_action($name, $topic_id, $forum_id = 0)
 	{
-		$action = $this->find_action($name);
+		$action = $this->_check_auth($name, $topic_id, $forum_id);
 
-		if (!$action)
+		if ($this->had_errors)
 		{
-			return $this->user->lang('TOPIC_ACTION_ERROR');
-		}
-
-		if (!$action->check_auth($forum_id, $topic_id))
-		{
-			$this->had_errors = true;
-			return $this->user->lang('TOPIC_ACTION_NO_PERMISSION');
+			// Return the error string.
+			return $action;
 		}
 
 		if (!$action->perform($forum_id, $topic_id))
@@ -124,6 +164,7 @@ class manager
 
 		if (!$action)
 		{
+			$this->had_errors = true;
 			return $this->user->lang('TOPIC_ACTION_ERROR');
 		}
 
@@ -147,17 +188,12 @@ class manager
 	 */
 	public function perform_preliminary($name, $topic_id, $forum_id = 0)
 	{
-		$action = $this->find_action($name);
+		$action = $this->_check_auth($name, $topic_id, $forum_id);
 
-		if (!$action)
+		if ($this->had_errors)
 		{
-			return $this->user->lang('TOPIC_ACTION_ERROR');
-		}
-
-		if (!$action->check_auth($forum_id, $topic_id))
-		{
-			$this->had_errors = true;
-			return $this->user->lang('TOPIC_ACTION_NO_PERMISSION');
+			// Return the error string.
+			return $action;
 		}
 
 		if (!$action->preliminary_action($forum_id, $topic_id))
