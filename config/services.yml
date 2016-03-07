@@ -3,10 +3,10 @@ services:
         class: rxu\TopicActions\event\listener
         arguments:
             - @config
-            - @dbal.conn
             - @template
             - @user
             - @request
+            - @rxu.TopicActions.scheduler
             - @rxu.TopicActions.manager
             - %core.root_path%
             - %core.php_ext%
@@ -19,11 +19,20 @@ services:
             - @config
             - @dbal.conn
             - @user
+            - @rxu.TopicActions.scheduler
             - @rxu.TopicActions.manager
         calls:
             - [set_name, [cron.task.core.rxu_tidy_topics]]
         tags:
             - { name: cron.task }
+
+    rxu.TopicActions.scheduler:
+        class: rxu\TopicActions\functions\scheduler
+        arguments:
+            - @dbal.conn
+            - @template
+            - @user
+            - @rxu.TopicActions.manager
 
     rxu.TopicActions.manager:
         class: rxu\TopicActions\functions\manager

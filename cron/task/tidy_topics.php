@@ -25,22 +25,27 @@ class tidy_topics extends \phpbb\cron\task\base
 	/** @var \phpbb\user */
 	protected $user;
 
+	/** @var \rxu\TopicActions\functions\scheduler */
+	protected $scheduler;
+
 	/** @var \rxu\TopicActions\functions\manager */
 	protected $manager;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param \phpbb\config\config                $config
-	 * @param \phpbb\db\driver\driver_interface   $db
-	 * @param \phpbb\user                         $user
-	 * @param \rxu\TopicActions\functions\manager $manager
+	 * @param \phpbb\config\config                  $config
+	 * @param \phpbb\db\driver\driver_interface     $db
+	 * @param \phpbb\user                           $user
+	 * @param \rxu\TopicActions\functions\scheduler $scheduler
+	 * @param \rxu\TopicActions\functions\manager   $manager
 	 */
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \rxu\TopicActions\functions\manager $manager)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \rxu\TopicActions\functions\scheduler $scheduler, \rxu\TopicActions\functions\manager $manager)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->user = $user;
+		$this->scheduler = $scheduler;
 		$this->manager = $manager;
 	}
 
@@ -86,13 +91,12 @@ class tidy_topics extends \phpbb\cron\task\base
 
 		if (sizeof($topics_list))
 		{
-			$this->db->sql_transaction('begin');
 			foreach ($topics_list as $row)
 			{
 				// @todo: Log errors to error log.
 				$this->manager->execute_action($row['topic_action_type'], $row['topic_id'], $row['forum_id']);
+				$this->scheduler->unset_topic_action($row['topic_id']);
 			}
-			$this->db->sql_transaction('commit');
 		}
 		$this->config->set('topics_last_gc', $current_time, true);
 	}

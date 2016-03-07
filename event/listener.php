@@ -22,9 +22,6 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\config\config */
 	protected $config;
 
-	/** @var \phpbb\db\driver\driver_interface */
-	protected $db;
-
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -33,6 +30,9 @@ class listener implements EventSubscriberInterface
 
 	/** @var \phpbb\request\request_interface */
 	protected $request;
+
+	/** @var \rxu\TopicActions\functions\scheduler */
+	protected $scheduler;
 
 	/** @var \rxu\TopicActions\functions\manager */
 	protected $manager;
@@ -43,13 +43,13 @@ class listener implements EventSubscriberInterface
 	/** @var string */
 	protected $php_ext;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, \phpbb\request\request_interface $request, \rxu\TopicActions\functions\manager $manager, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\request\request_interface $request, \rxu\TopicActions\functions\scheduler $scheduler, \rxu\TopicActions\functions\manager $manager, $phpbb_root_path, $php_ext)
 	{
 		$this->config = $config;
-		$this->db = $db;
 		$this->template = $template;
 		$this->user = $user;
 		$this->request = $request;
+		$this->scheduler = $scheduler;
 		$this->manager = $manager;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
@@ -102,7 +102,7 @@ class listener implements EventSubscriberInterface
 
 		if ($delete_action)
 		{
-			if ($this->set_topic_action_time('', 0, $topic_id))
+			if ($this->scheduler->unset_topic_action($topic_id))
 			{
 				$message .= $this->user->lang('TOPIC_ACTION_DELETED');
 			}
@@ -130,7 +130,7 @@ class listener implements EventSubscriberInterface
 			}
 			else if ($topic_action_time > 0)
 			{
-				if ($this->set_topic_action_time($topic_action, $topic_action_time, $topic_id))
+				if ($this->scheduler->set_topic_action_time($topic_action, $topic_action_time, $topic_id))
 				{
 					$message .= $this->user->lang('TOPIC_ACTION_SET');
 				}
@@ -142,7 +142,7 @@ class listener implements EventSubscriberInterface
 			}
 			else if ($topic_action_time == 0)
 			{
-				$this->set_topic_action_time('', 0, $topic_id);
+				$this->scheduler->unset_topic_action($topic_id);
 				$message .= $this->manager->perform_action($topic_action, $topic_id, $forum_id);
 			}
 		}
@@ -164,91 +164,14 @@ class listener implements EventSubscriberInterface
 
 		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
 
-		$action_select = $this->topic_action_select($forum_id, $topic_id);
-		$action_select_time = ($action_select) ? $this->topic_action_time_select() : false;
+		$action_select = $this->scheduler->topic_action_select($forum_id, $topic_id);
+		$action_select_time = ($action_select) ? $this->scheduler->topic_action_time_select() : false;
 
 		$this->template->assign_vars(array(
 			'TOPIC_ACTION_SELECT'      => $action_select,
 			'TOPIC_ACTION_TIME_SELECT' => $action_select_time,
 			'TOPIC_ACTION_TIME'        => ($topic_data['topic_action_time'] && ($topic_data['topic_action_time'] > $this->config['topics_last_gc'])) ? sprintf($this->user->lang['TOPIC_ACTION']['DELAY_EXPLAIN'], $this->user->lang['TOPIC_ACTION']['TYPE_NOTICE'][$topic_data['topic_action_type']], $this->user->format_date($topic_data['topic_action_time'])) : '',
 		));
-	}
-
-	/**
-	 * Set Topic Action Time
-	 */
-	public function set_topic_action_time($action = '', $time = 0, $topic_id = false)
-	{
-		if (!$topic_id)
-		{
-			return false;
-		}
-
-		$sql = 'SELECT icons_id FROM ' . ICONS_TABLE . '
-			WHERE icons_url ' . $this->db->sql_like_expression($this->db->get_any_char() . 'trash.png');
-		$result = $this->db->sql_query($sql);
-		$icon_id = (int) $this->db->sql_fetchfield('icons_id');
-		$this->db->sql_freeresult($result);
-
-		$sql_ary = array(
-			'topic_action_time' => ($time > 0) ? (time() + $time * 86400) : 0,
-			'topic_action_type' => $action,
-			'icon_id'           => ($time > 0 && $icon_id) ? $icon_id : 0,
-		);
-
-		$sql = 'UPDATE ' . TOPICS_TABLE . ' SET  ' . $this->db->sql_build_array('UPDATE', $sql_ary) . '
-			WHERE topic_id = ' . $topic_id;
-
-		if ($this->db->sql_query($sql))
-		{
-			return $sql_ary;
-		}
-
-		return false;
-	}
-
-	public function topic_action_select($forum_id, $topic_id, $default = 'trash')
-	{
-		$actions = $this->manager->get_actions($topic_id, $forum_id);
-		if (!sizeof($actions))
-		{
-			return false;
-		}
-
-		$topic_action_select = '';
-		foreach ($actions as $key => $action)
-		{
-			$selected = ($action == $default) ? ' selected="selected"' : '';
-			$topic_action_select .= '<option value="' . $action . '"' . $selected . '>' . $this->user->lang(array('TOPIC_ACTION', 'TYPE', $action)) . '</option>';
-		}
-
-		$topic_action_select = '<select id="topic_action" name="topic_action">' . $topic_action_select . '</select>';
-
-		return $topic_action_select;
-	}
-
-	public function topic_action_time_select($default = 0)
-	{
-		$topic_action_time_select = '';
-		$actions = array();
-		if (sizeof($this->user->lang['TOPIC_ACTION']['TIME']))
-		{
-			$actions = array_keys($this->user->lang['TOPIC_ACTION']['TIME']);
-		}
-		else
-		{
-			return false;
-		}
-
-		foreach ($actions as $key => $days)
-		{
-			$selected = ($key == $default) ? ' selected="selected"' : '';
-			$topic_action_time_select .= '<option value="' . $days . '"' . $selected . '>' . $this->user->lang['TOPIC_ACTION']['TIME'][$days] . '</option>';
-		}
-
-		$topic_action_time_select = (!empty($topic_action_time_select)) ? '<select id="topic_action_time" name="topic_action_time">' . $topic_action_time_select . '</select>' : '';
-
-		return $topic_action_time_select;
 	}
 
 	private function modify_icon_path($topicrow)
