@@ -9,7 +9,7 @@
 
 namespace rxu\TopicActions\migrations;
 
-class rename_action_types extends \phpbb\db\migration\migration
+class rename_action_types extends \phpbb\db\migration\container_aware_migration
 {
 	static public function depends_on()
 	{
@@ -25,8 +25,6 @@ class rename_action_types extends \phpbb\db\migration\migration
 
 	public function rename_types()
 	{
-		global $cache;
-
 		$sql = 'UPDATE ' . TOPICS_TABLE . "
 				SET topic_action_type = 'trash'
 				WHERE topic_action_type = 'RECYCLE'";
@@ -42,6 +40,7 @@ class rename_action_types extends \phpbb\db\migration\migration
 				WHERE topic_action_type = 'DELETE'";
 		$this->db->sql_query($sql);
 
+		$cache = $this->container->get('cache');
 		$cache->destroy('sql', TOPICS_TABLE);
 	}
 }

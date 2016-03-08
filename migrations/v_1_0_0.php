@@ -9,7 +9,7 @@
 
 namespace rxu\TopicActions\migrations;
 
-class v_1_0_0 extends \phpbb\db\migration\migration
+class v_1_0_0 extends \phpbb\db\migration\container_aware_migration
 {
 	public function effectively_installed()
 	{
@@ -70,8 +70,6 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 
 	public function add_icon()
 	{
-		global $cache;
-
 		$sql = 'SELECT MAX(icons_order) as max_order FROM ' . ICONS_TABLE;
 		$result = $this->db->sql_query($sql);
 		$max_order = (int) $this->db->sql_fetchfield('max_order');
@@ -87,14 +85,11 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 		$sql = 'INSERT INTO ' . ICONS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_insert);
 		$this->db->sql_query($sql);
 
-		$cache->destroy('_icons');
-		$cache->destroy('sql', ICONS_TABLE);
+		$this->clear_icons_cache();
 	}
 
 	public function remove_icon()
 	{
-		global $cache;
-
 		$sql = 'SELECT icons_id FROM ' . ICONS_TABLE . ' WHERE icons_url ' . $this->db->sql_like_expression($this->db->get_any_char() . 'trash.png');
 		$result = $this->db->sql_query($sql);
 		$icon_id = (int) $this->db->sql_fetchfield('icons_id');
@@ -108,8 +103,14 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 			$sql = 'UPDATE ' . TOPICS_TABLE . ' SET icon_id = 0 WHERE icon_id = ' . $icon_id;
 			$this->db->sql_query($sql);
 
-			$cache->destroy('_icons');
-			$cache->destroy('sql', ICONS_TABLE);
+			$this->clear_icons_cache();
 		}
+	}
+
+	protected function clear_icons_cache()
+	{
+		$cache = $this->container->get('cache');
+		$cache->destroy('_icons');
+		$cache->destroy('sql', ICONS_TABLE);
 	}
 }
