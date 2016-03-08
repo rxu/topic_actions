@@ -27,9 +27,6 @@ class manager
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var bool Whether one of last actions ended with errors */
-	public $had_errors = false;
-
 	/** @var array Array of occurred errors */
 	private $errors = array();
 
@@ -118,14 +115,12 @@ class manager
 
 		if (!$action)
 		{
-			$this->had_errors = true;
 			$this->errors[] = $this->user->lang('TOPIC_ACTION_ERROR');
 			return false;
 		}
 
 		if (!$action->check_auth($forum_id, $topic_id))
 		{
-			$this->had_errors = true;
 			$this->errors[] = $this->user->lang('TOPIC_ACTION_NO_PERMISSION');
 			return false;
 		}
@@ -166,7 +161,6 @@ class manager
 
 		if (!$action->perform($forum_id, $topic_id))
 		{
-			$this->had_errors = true;
 			$error = $action->get_error();
 			$this->errors[] = ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
 			return false;
@@ -189,14 +183,12 @@ class manager
 
 		if (!$action)
 		{
-			$this->had_errors = true;
 			$this->errors[] = $this->user->lang('TOPIC_ACTION_ERROR');
 			return false;
 		}
 
 		if (!$action->perform($forum_id, $topic_id))
 		{
-			$this->had_errors = true;
 			$error = $action->get_error();
 			$this->errors[] = ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
 			return false;
@@ -224,7 +216,6 @@ class manager
 
 		if (!$action->preliminary_action($forum_id, $topic_id))
 		{
-			$this->had_errors = true;
 			$error = $action->get_error();
 			$this->errors[] = ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
 			return false;
