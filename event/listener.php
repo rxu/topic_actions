@@ -123,10 +123,9 @@ class listener implements EventSubscriberInterface
 				trigger_error($this->user->lang('NO_TIME_SET'));
 			}
 
-			$result = $this->manager->perform_preliminary($topic_action, $topic_id, $forum_id);
-			if ($result !== true)
+			if (!$this->manager->perform_preliminary($topic_action, $topic_id, $forum_id))
 			{
-				$message .= $result;
+				$message .= $this->manager->get_error();
 			}
 			else if ($topic_action_time > 0)
 			{
@@ -143,11 +142,12 @@ class listener implements EventSubscriberInterface
 			else if ($topic_action_time == 0)
 			{
 				$this->scheduler->unset_topic_action($topic_id);
-				$message .= $this->manager->perform_action($topic_action, $topic_id, $forum_id);
+				$result = $this->manager->perform_action($topic_action, $topic_id, $forum_id);
+				$message .= ($result) ? $result : $this->manager->get_error();
 			}
 		}
 
-		if ($topic_action != 'delete' || $this->manager->had_errors)
+		if ($topic_action != 'delete' || $this->manager->has_errors())
 		{
 			$message .= '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . append_sid("{$this->phpbb_root_path}viewtopic.$this->php_ext", "f=$forum_id&amp;t=$topic_id") . '">', '</a>');
 		}

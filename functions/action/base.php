@@ -16,7 +16,7 @@ namespace rxu\TopicActions\functions\action;
 abstract class base
 {
 	private $name;
-	private $errors;
+	private $errors = array();
 	public $success_lang_key = 'TOPIC_ACTION_PERFORMED';
 
 	/** @var string */

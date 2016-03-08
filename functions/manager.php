@@ -30,6 +30,9 @@ class manager
 	/** @var bool Whether one of last actions ended with errors */
 	public $had_errors = false;
 
+	/** @var array Array of occurred errors */
+	private $errors = array();
+
 	/**
 	 * Constructor. Loads all available actions.
 	 *
@@ -55,6 +58,26 @@ class manager
 		{
 			$this->actions[] = $action;
 		}
+	}
+
+	/**
+	 * Returns the error string.
+	 *
+	 * @return string Error string (empty if no errors occurred)
+	 */
+	public function get_error()
+	{
+		return implode('<br>', $this->errors);
+	}
+
+	/**
+	 * Returns whether there were any errors.
+	 *
+	 * @return bool
+	 */
+	public function has_errors()
+	{
+		return (bool) sizeof($this->errors);
 	}
 
 	/**
@@ -96,13 +119,15 @@ class manager
 		if (!$action)
 		{
 			$this->had_errors = true;
-			return $this->user->lang('TOPIC_ACTION_ERROR');
+			$this->errors[] = $this->user->lang('TOPIC_ACTION_ERROR');
+			return false;
 		}
 
 		if (!$action->check_auth($forum_id, $topic_id))
 		{
 			$this->had_errors = true;
-			return $this->user->lang('TOPIC_ACTION_NO_PERMISSION');
+			$this->errors[] = $this->user->lang('TOPIC_ACTION_NO_PERMISSION');
+			return false;
 		}
 
 		return ($check) ? true : $action;
@@ -128,23 +153,23 @@ class manager
 	 * @param string $name     Name of the action
 	 * @param int    $topic_id Topic ID
 	 * @param int    $forum_id Forum ID (can be optional)
-	 * @return string Success message or error string
+	 * @return string|false Success message or false in case of an error
 	 */
 	public function perform_action($name, $topic_id, $forum_id = 0)
 	{
 		$action = $this->_check_auth($name, $topic_id, $forum_id);
 
-		if ($this->had_errors)
+		if (!$action)
 		{
-			// Return the error string.
-			return $action;
+			return false;
 		}
 
 		if (!$action->perform($forum_id, $topic_id))
 		{
 			$this->had_errors = true;
 			$error = $action->get_error();
-			return ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
+			$this->errors[] = ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
+			return false;
 		}
 
 		return $this->user->lang($action->success_lang_key);
@@ -156,7 +181,7 @@ class manager
 	 * @param string $name     Name of the action
 	 * @param int    $topic_id Topic ID
 	 * @param int    $forum_id Forum ID (can be optional)
-	 * @return string Success message or error string
+	 * @return bool Whether the action was executed without errors
 	 */
 	public function execute_action($name, $topic_id, $forum_id = 0)
 	{
@@ -165,14 +190,16 @@ class manager
 		if (!$action)
 		{
 			$this->had_errors = true;
-			return $this->user->lang('TOPIC_ACTION_ERROR');
+			$this->errors[] = $this->user->lang('TOPIC_ACTION_ERROR');
+			return false;
 		}
 
 		if (!$action->perform($forum_id, $topic_id))
 		{
 			$this->had_errors = true;
 			$error = $action->get_error();
-			return ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
+			$this->errors[] = ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
+			return false;
 		}
 
 		return true;
@@ -184,23 +211,23 @@ class manager
 	 * @param string $name     Name of the action
 	 * @param int    $topic_id Topic ID
 	 * @param int    $forum_id Forum ID (can be optional)
-	 * @return true|string True on success, error string otherwise
+	 * @return bool Whether the preliminary action was performed without errors
 	 */
 	public function perform_preliminary($name, $topic_id, $forum_id = 0)
 	{
 		$action = $this->_check_auth($name, $topic_id, $forum_id);
 
-		if ($this->had_errors)
+		if (!$action)
 		{
-			// Return the error string.
-			return $action;
+			return false;
 		}
 
 		if (!$action->preliminary_action($forum_id, $topic_id))
 		{
 			$this->had_errors = true;
 			$error = $action->get_error();
-			return ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
+			$this->errors[] = ($error) ? $error : $this->user->lang('TOPIC_ACTION_ERROR');
+			return false;
 		}
 
 		return true;
