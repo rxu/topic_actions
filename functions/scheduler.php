@@ -45,7 +45,7 @@ class scheduler
 	 */
 	public function set_topic_action_time($action = '', $time = 0, $topic_id = 0, $forum_id = 0)
 	{
-		if (!$topic_id || ($action && !$this->manager->check_auth($action, $topic_id, $forum_id)))
+		if (!$topic_id || ($action && $this->manager->check_auth($action, $topic_id, $forum_id) !== true))
 		{
 			return false;
 		}
