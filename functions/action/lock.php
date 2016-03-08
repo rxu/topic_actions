@@ -57,7 +57,7 @@ class lock extends base
 		{
 			return false;
 		}
-		return (bool) ($this->auth->acl_get('m_lock', $forum_id) || $this->auth->acl_get('f_user_lock', $forum_id)) && $row['topic_status'] == ITEM_UNLOCKED;
+		return (bool) ($this->auth->acl_get('m_lock', $forum_id) || $this->auth->acl_get('f_user_lock', $forum_id) && $row['topic_poster'] == $this->user->data['user_id']) && $row['topic_status'] == ITEM_UNLOCKED;
 	}
 
 	/**
