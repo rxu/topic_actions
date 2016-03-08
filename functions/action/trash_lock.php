@@ -42,7 +42,11 @@ class trash_lock extends trash
 	 */
 	public function check_auth($forum_id, $topic_id)
 	{
-		return (bool) $this->auth->acl_get('m_softdelete', $forum_id) && $this->auth->acl_gets(array('m_lock', 'f_user_lock'), $forum_id);
+		if (!$row = $this->get_topic_data($topic_id))
+		{
+			return false;
+		}
+		return (bool) $this->auth->acl_get('m_softdelete', $forum_id) && ($this->auth->acl_get('m_lock', $forum_id) || $this->auth->acl_get('f_user_lock', $forum_id) && $row['topic_poster'] == $this->user->data['user_id']);
 	}
 
 	/**
