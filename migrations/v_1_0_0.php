@@ -1,16 +1,15 @@
 <?php
 /**
-*
-* Topic Actions extension for the phpBB Forum Software package.
-*
-* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
-* @license GNU General Public License, version 2 (GPL-2.0)
-*
-*/
+ *
+ * @package       Topic Actions
+ * @copyright (c) 2013 - 2016 rxu and LavIgor
+ * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace rxu\TopicActions\migrations;
 
-class v_1_0_0 extends \phpbb\db\migration\migration
+class v_1_0_0 extends \phpbb\db\migration\container_aware_migration
 {
 	public function effectively_installed()
 	{
@@ -19,12 +18,12 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-			return array('\phpbb\db\migration\data\v310\dev');
+		return array('\phpbb\db\migration\data\v310\dev');
 	}
 
 	public function update_schema()
 	{
-		return 	array(
+		return array(
 			'add_columns' => array(
 				$this->table_prefix . 'topics' => array(
 					'topic_action_time' => array('INT:11', '0'),
@@ -36,7 +35,7 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 
 	public function revert_schema()
 	{
-		return 	array(
+		return array(
 			'drop_columns' => array(
 				$this->table_prefix . 'topics' => array(
 					'topic_action_time',
@@ -71,30 +70,26 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 
 	public function add_icon()
 	{
-		global $cache;
-
 		$sql = 'SELECT MAX(icons_order) as max_order FROM ' . ICONS_TABLE;
 		$result = $this->db->sql_query($sql);
 		$max_order = (int) $this->db->sql_fetchfield('max_order');
+		$this->db->sql_freeresult($result);
 
 		$sql_insert = array(
-			'icons_url' => 'ext/rxu/TopicActions/icon/trash.png',
-			'icons_width' => 16,
-			'icons_height' => 16,
-			'icons_order' => $max_order + 1,
-			'display_on_posting'	=> 0,
+			'icons_url'          => 'ext/rxu/TopicActions/icon/trash.png',
+			'icons_width'        => 16,
+			'icons_height'       => 16,
+			'icons_order'        => $max_order + 1,
+			'display_on_posting' => 0,
 		);
 		$sql = 'INSERT INTO ' . ICONS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_insert);
 		$this->db->sql_query($sql);
 
-		$cache->destroy('_icons');
-		$cache->destroy('sql', ICONS_TABLE);
+		$this->clear_icons_cache();
 	}
 
 	public function remove_icon()
 	{
-		global $cache;
-
 		$sql = 'SELECT icons_id FROM ' . ICONS_TABLE . ' WHERE icons_url ' . $this->db->sql_like_expression($this->db->get_any_char() . 'trash.png');
 		$result = $this->db->sql_query($sql);
 		$icon_id = (int) $this->db->sql_fetchfield('icons_id');
@@ -108,8 +103,14 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 			$sql = 'UPDATE ' . TOPICS_TABLE . ' SET icon_id = 0 WHERE icon_id = ' . $icon_id;
 			$this->db->sql_query($sql);
 
-			$cache->destroy('_icons');
-			$cache->destroy('sql', ICONS_TABLE);
+			$this->clear_icons_cache();
 		}
+	}
+
+	protected function clear_icons_cache()
+	{
+		$cache = $this->container->get('cache');
+		$cache->destroy('_icons');
+		$cache->destroy('sql', ICONS_TABLE);
 	}
 }

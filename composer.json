@@ -1,28 +1,32 @@
 {
-    "name": "rxu/TopicActions",
-    "type": "phpbb-extension",
-    "description": "Allows to schedule some topic actions like recycling or deletion.",
-    "homepage": "http://www.phpbbguru.net",
-    "version": "1.0.0",
-    "time": "2014-02-20",
-    "license": "GPL-2.0",
-    "authors": [
-        {
-            "name": "rxu",
-            "homepage": "http://www.phpbbguru.net",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.3"
-    },
-   "require-dev": {
-      "phpbb/epv": "dev-master"
-   },
-    "extra": {
-        "display-name": "Topic actions shedule",
-        "soft-require": {
-           "phpbb/phpbb": "3.1.*@dev"
-        }
-    }
+	"name": "rxu/TopicActions",
+	"type": "phpbb-extension",
+	"description": "Allows to schedule some topic actions like trashing, locking or deletion.",
+	"homepage": "http://www.phpbbguru.net",
+	"version": "1.0.0",
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "rxu",
+			"homepage": "http://www.phpbbguru.net",
+			"role": "Developer"
+		},
+		{
+			"name": "LavIgor",
+			"homepage": "https://github.com/lavigor",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"require-dev": {
+		"phpbb/epv": "dev-master"
+	},
+	"extra": {
+		"display-name": "Topic actions schedule",
+		"soft-require": {
+			"phpbb/phpbb": "3.1.*"
+		}
+	}
 }
