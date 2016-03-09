@@ -1,15 +1,18 @@
 <?php
-/**
- *
- * @package       Topic Actions
- * @copyright (c) 2013 - 2016 rxu and LavIgor
- * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
- */
+/** 
+*
+* Topic Actions extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
+*
+* French translation by Galixte (http://www.galixte.com)
+*
+*/
 
 /**
- * DO NOT CHANGE
- */
+* DO NOT CHANGE
+*/
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -44,30 +47,39 @@ $lang = array_merge($lang, array(
 	'NO_ACTION_SELECTED'			=> 'No action was selected.',
 	'NO_TIME_SET'					=> 'Action was not planned.',
 	'TOPIC_ACTION'	=> array(
-		'NOT_ENOUGH_PARAMS'	=> 'Not enough parameters.',
-		'DELAY'				=> 'Action delay.',
-		'DELAY_EXPLAIN'		=> 'This topic is planned to be %1$s on: %2$s',
+		'NOT_ENOUGH_PARAMS'	=> 'Pas assez de paramètres.',
+		'NO_ACTION_SELECTED'=> 'Aucune action sélectionnée.',
+		'NO_TIME_SET'		=> 'Action non planifiée.',
+		'DELAY'				=> 'Délais de l’action.',
+		'DELAY_EXPLAIN'		=> 'Action planifiée sur le sujet : %1$s le %2$s',
+		'SELECT_ACTION'		=> 'Sélectionner l’action',
+		'DELETE_ACTION'		=> 'Supprimer l’action',
+		'TOPIC_ACTION_PERFORMED'=> 'L’action planifiée a été exécutée avec succès.',
+		'TOPIC_ACTION_SET'	=> 'La planification de l’action a été paramétrée avec succès.',
+		'TOPIC_ACTION_DELETED'	=> 'La planification de l’action a été supprimée avec succès.',
 		'TIME'	=> array(
-			'0'  => 'Now',
-			'1'  => 'in 1 day',
-			'3'  => 'in 3 days',
-			'5'  => 'in 5 days',
-			'7'  => 'in 7 days',
-			'14' => 'in 2 weeks',
-			'30' => 'in 1 month'
+			'0'		=> 'Maintenant',
+			'1'		=> 'dans un jour',
+			'3'		=> 'dans trois jours',
+			'5'		=> 'dans cinq jours',
+			'7' 	=> 'dans une semaine',
+			'14'	=> 'dans deux semaines',
+			'30'	=> 'dans un mois'
 		),
 		'TYPE'	=> array(
-			'trash'			=> 'Soft delete',
-			'trash_lock'	=> 'Lock now and shedule soft delete',
-			'delete'		=> 'Delete',
+			'trash'			=> 'Supprimer (avec restauration possible)',
+			'trash_lock'	=> 'Verrouiller puis supprimer (avec restauration possible)',
+			'delete'		=> 'Supprimer définitivement',
 			'lock'			=> 'Lock',
 			'unlock'		=> 'Unlock',
-			/*			'FORK'			=> 'Копировать',
+			/*			'FORK'			=> 'Copier',
+						'LOCK'			=> 'Verrouiller',
+						'UNLOCK'		=> 'Déverrouiller',
 						'CHANGE_TYPE'	=> array(
-							'MAKE_ANNOUNCE'	=> 'Сделать объявлением',
-							'MAKE_GLOBAL'	=> 'Сделать важной',
-							'MAKE_STICKY'	=> 'Сделать прилепленной',
-							'MAKE_NORMAL'	=> 'Сделать обычной'
+							'MAKE_ANNOUNCE'	=> 'Créer une annonce',
+							'MAKE_GLOBAL'	=> 'Créer une annonce globale',
+							'MAKE_STICKY'	=> 'Créer un post-it',
+							'MAKE_NORMAL'	=> 'Créer un sujet'
 						)
 			*/
 		),
