@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 *
 * Topic Actions extension for the phpBB Forum Software package.
 *
