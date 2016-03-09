@@ -200,6 +200,7 @@ class listener implements EventSubscriberInterface
 		{
 			$this->template->assign_vars(array(
 				'T_ICONS_PATH' => '',
+				'S_TOPIC_ICONS' => true,
 			));
 		}
 	}
