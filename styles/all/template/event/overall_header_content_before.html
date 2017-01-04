@@ -3,10 +3,16 @@
 	<div class="inner">
 		<strong style="display: inline-block; padding: 5px 0;">{TOPIC_ACTION_TIME}</strong>
 		<!-- IF TOPIC_ACTION_SELECT -->
-		<div class="post-buttons">
-			<a href="{S_MOD_ACTION}&amp;action=topic_action&amp;delete_action=1" title="{L_DELETE_ACTION}"
-			   class="button icon-button delete-icon"></a>
-		</div>
+			<!-- IF TOPIC_ACTION_FONTAWESOME -->
+			<div class="post-buttons" style="margin: 0;">
+				<a href="{S_MOD_ACTION}&amp;action=topic_action&amp;delete_action=1" title="{L_DELETE_ACTION}" class="button button-icon-only"><i class="icon fa-times fa-fw" aria-hidden="true"></i></a>
+			</div>
+			<!-- ELSE -->
+			<div class="post-buttons">
+				<a href="{S_MOD_ACTION}&amp;action=topic_action&amp;delete_action=1" title="{L_DELETE_ACTION}"
+				   class="button icon-button delete-icon"></a>
+			</div>
+			<!-- ENDIF -->
 		<!-- ENDIF -->
 	</div>
 </div>
