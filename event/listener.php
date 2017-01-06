@@ -168,10 +168,22 @@ class listener implements EventSubscriberInterface
 		$action_select_time = ($action_select) ? $this->scheduler->topic_action_time_select() : false;
 
 		$this->template->assign_vars(array(
+			'TOPIC_ACTION_FONTAWESOME' => $this->get_phpbb_branch() != '3.1',
 			'TOPIC_ACTION_SELECT'      => $action_select,
 			'TOPIC_ACTION_TIME_SELECT' => $action_select_time,
 			'TOPIC_ACTION_TIME'        => ($topic_data['topic_action_time'] && ($topic_data['topic_action_time'] > $this->config['topics_last_gc'])) ? sprintf($this->user->lang['TOPIC_ACTION']['DELAY_EXPLAIN'], $this->user->lang['TOPIC_ACTION']['TYPE_NOTICE'][$topic_data['topic_action_type']], $this->user->format_date($topic_data['topic_action_time'])) : '',
 		));
+	}
+
+	private function get_phpbb_branch()
+	{
+		static $branch = null;
+		if (is_null($branch))
+		{
+			preg_match('/^(\d+\.\d+).+/', $this->config['version'], $matches);
+			$branch = $matches[1];
+		}
+		return $branch;
 	}
 
 	private function modify_icon_path($topicrow)
@@ -199,7 +211,7 @@ class listener implements EventSubscriberInterface
 		if ($this->flag)
 		{
 			$this->template->assign_vars(array(
-				'T_ICONS_PATH' => '',
+				'T_ICONS_PATH'  => '',
 				'S_TOPIC_ICONS' => true,
 			));
 		}

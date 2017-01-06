@@ -1,8 +1,15 @@
 <!-- IF TOPIC_ACTION_SELECT -->
 <div class="dropdown-container dropdown-container-{S_CONTENT_FLOW_BEGIN} dropdown-up dropdown-{S_CONTENT_FLOW_END} dropdown-button-control topic-tools"
      id="quickmod_schedule">
+	<!-- IF TOPIC_ACTION_FONTAWESOME -->
+	<span title="{L_SCHEDULE_TOPIC_ACTION}" class="button button-secondary dropdown-trigger dropdown-select">
+		<i class="icon fa-clock-o fa-fw" aria-hidden="true"></i>
+		<span class="caret"><i class="icon fa-sort-down fa-fw" aria-hidden="true"></i></span>
+	</span>
+	<!-- ELSE -->
 	<span title="{L_SCHEDULE_TOPIC_ACTION}"
 	      class="dropdown-trigger button icon-button responsive-menu-link dropdown-select"></span>
+	<!-- ENDIF -->
 	<div class="dropdown hidden">
 		<div class="pointer">
 			<div class="pointer-inner"></div>
