@@ -7,20 +7,20 @@
  *
  */
 
-namespace rxu\TopicActions\migrations;
+namespace rxu\topicactions\migrations;
 
 class rename_action_types extends \phpbb\db\migration\container_aware_migration
 {
 	static public function depends_on()
 	{
-		return array('\rxu\TopicActions\migrations\v_1_0_0');
+		return ['\rxu\topicactions\migrations\v_1_0_0'];
 	}
 
 	public function update_data()
 	{
-		return array(
-			array('custom', array(array($this, 'rename_types'))),
-		);
+		return [
+			['custom', [[$this, 'rename_types']]],
+		];
 	}
 
 	public function rename_types()

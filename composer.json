@@ -1,5 +1,5 @@
 {
-	"name": "rxu/TopicActions",
+	"name": "rxu/topicactions",
 	"type": "phpbb-extension",
 	"description": "Allows to schedule some topic actions like trashing, locking or deletion.",
 	"homepage": "http://www.phpbbguru.net",

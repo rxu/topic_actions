@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\functions;
+namespace rxu\topicactions\functions;
 
 /**
  * Topic Actions scheduler.
@@ -23,10 +23,10 @@ class scheduler
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var \rxu\TopicActions\functions\manager */
+	/** @var \rxu\topicactions\functions\manager */
 	protected $manager;
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, \rxu\TopicActions\functions\manager $manager)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, \rxu\topicactions\functions\manager $manager)
 	{
 		$this->db = $db;
 		$this->template = $template;

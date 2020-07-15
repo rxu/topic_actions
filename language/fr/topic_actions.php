@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -38,7 +38,7 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'SCHEDULE_TOPIC_ACTION'			=> 'Planifier l’action sur le sujet',
 	'SELECT_ACTION'					=> 'Sélectionner',
 	'DELETE_ACTION'					=> 'Supprimer',
@@ -49,11 +49,11 @@ $lang = array_merge($lang, array(
 	'TOPIC_ACTION_DELETED'			=> 'Temps d’action supprimé avec succès.',
 	'NO_ACTION_SELECTED'			=> 'Aucune action sélectionnée.',
 	'NO_TIME_SET'					=> 'L’action n’a pas été planifiée.',
-	'TOPIC_ACTION'	=> array(
+	'TOPIC_ACTION'	=> [
 		'NOT_ENOUGH_PARAMS'	=> 'Pas assez de paramètres.',
 		'DELAY'				=> 'Délais de l’action.',
 		'DELAY_EXPLAIN'		=> 'Action planifiée sur le sujet : %1$s le %2$s',
-		'TIME'	=> array(
+		'TIME'	=> [
 			'0'  => 'Maintenant',
 			'1'  =>  'dans un jour',
 			'3'  => 'dans trois jours',
@@ -61,8 +61,8 @@ $lang = array_merge($lang, array(
 			'7'  => 'dans une semaine',
 			'14'  => 'dans deux semaines',
 			'30'  => 'dans un mois'
-		),
-		'TYPE'	=> array(
+		],
+		'TYPE'	=> [
 			'trash'			=> 'Supprimer (restauration possible)',
 			'trash_lock'	=> 'Verrouiller puis supprimer (restauration possible)',
 			'delete'		=> 'Supprimer définitivement',
@@ -76,13 +76,13 @@ $lang = array_merge($lang, array(
 							'MAKE_NORMAL'	=> 'Créer un sujet'
 						)
 			*/
-		),
-		'TYPE_NOTICE'	=> array(
+		],
+		'TYPE_NOTICE'	=> [
 			'trash'			=> 'supprimé (restauration possible)',
 			'trash_lock'	=> 'verrouillé puis supprimer (restauration possible)',
 			'delete'		=> 'supprimé',
 			'lock'			=> 'verrouillé',
 			'unlock'		=> 'déverrouillé',
-		),
-	),
-));
+		],
+	],
+]);

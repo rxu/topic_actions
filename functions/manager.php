@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\functions;
+namespace rxu\topicactions\functions;
 
 /**
  * Topic actions manager class.
@@ -17,7 +17,7 @@ namespace rxu\TopicActions\functions;
 class manager
 {
 	/**
-	 * Set of \rxu\TopicActions\functions\action\base objects.
+	 * Set of \rxu\topicactions\functions\action\base objects.
 	 * Array holding all actions that have been found.
 	 *
 	 * @var array
@@ -45,7 +45,7 @@ class manager
 	/**
 	 * Loads actions given by name and puts them into $this->actions.
 	 *
-	 * @param array|\Traversable $actions Array of instances of \rxu\TopicActions\functions\action\base
+	 * @param array|\Traversable $actions Array of instances of \rxu\topicactions\functions\action\base
 	 *
 	 * @return null
 	 */
@@ -83,7 +83,7 @@ class manager
 	 * If there is no action with the specified name, null is returned.
 	 *
 	 * @param string $name Name of the action to look up
-	 * @return \rxu\TopicActions\functions\action\base    An action corresponding to the given name, or null
+	 * @return \rxu\topicactions\functions\action\base    An action corresponding to the given name, or null
 	 */
 	protected function find_action($name)
 	{
@@ -107,7 +107,7 @@ class manager
 	 * @param int    $forum_id Forum ID (can be optional)
 	 * @param bool   $check    True if we need to check only,
 	 *                         false to return the action if checks passed
-	 * @return bool|string|\rxu\TopicActions\functions\action\base
+	 * @return bool|string|\rxu\topicactions\functions\action\base
 	 */
 	protected function _check_auth($name, $topic_id, $forum_id = 0, $check = false)
 	{

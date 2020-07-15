@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\functions\action;
+namespace rxu\topicactions\functions\action;
 
 /**
  * Trash topic action.
@@ -86,12 +86,12 @@ class trash extends base
 					$this->user->ip,
 					'LOG_SOFTDELETE_TOPIC',
 					false,
-					array(
+					[
 						'forum_id'                => $row['forum_id'],
 						'topic_id'                => $topic_id,
 						'topic_title'             => $row['topic_title'],
 						'topic_first_poster_name' => $row['topic_first_poster_name'],
-					)
+					]
 				);
 				return true;
 			}

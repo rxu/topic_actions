@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -33,7 +33,7 @@ if (empty($lang) || !is_array($lang))
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'SCHEDULE_TOPIC_ACTION'			=> 'Schedule topic action',
 	'SELECT_ACTION'					=> 'Select action',
 	'DELETE_ACTION'					=> 'Delete action',
@@ -44,7 +44,7 @@ $lang = array_merge($lang, array(
 	'TOPIC_ACTION_DELETED'			=> 'Action time was deleted successfully.',
 	'NO_ACTION_SELECTED'			=> 'No action was selected.',
 	'NO_TIME_SET'					=> 'Action was not planned.',
-	'TOPIC_ACTION'	=> array(
+	'TOPIC_ACTION'	=> [
 		'NOT_ENOUGH_PARAMS'	=> 'Недостатньо параметрів.',
 		'NO_ACTION_SELECTED'=> 'Не обрано бажану дію.',
 		'NO_TIME_SET'		=> 'Дію не було заплановано.',
@@ -55,7 +55,7 @@ $lang = array_merge($lang, array(
 		'TOPIC_ACTION_PERFORMED'=> 'Дію було виконано успішно.',
 		'TOPIC_ACTION_SET'	=> 'Час дії з темою було встановлено успішно.',
 		'TOPIC_ACTION_DELETED'	=> 'Час дії з темою було видалено успішно.',
-		'TIME'	=> array(
+		'TIME'	=> [
 			'0'		=> 'Зараз',
 			'1'		=> 'через 1 день',
 			'3'		=> 'через 3 дня',
@@ -63,8 +63,8 @@ $lang = array_merge($lang, array(
 			'7' 	=> 'через 7 днів',
 			'14'	=> 'через 2 тижні',
 			'30'	=> 'через 1 місяць'
-		),
-		'TYPE'	=> array(
+		],
+		'TYPE'	=> [
 			'trash'			=> 'Перемістити в корзину',
 			'trash_lock'	=> 'Перемістити в корзину (закрити)',
 			'delete'		=> 'Видалити',
@@ -80,13 +80,13 @@ $lang = array_merge($lang, array(
 							'MAKE_NORMAL'	=> 'Зробити звичайною',
 						)
 			*/
-		),
-		'TYPE_NOTICE'	=> array(
+		],
+		'TYPE_NOTICE'	=> [
 			'trash'			=> 'soft deleted',
 			'trash_lock'	=> 'soft deleted',
 			'delete'		=> 'deleted',
 			'lock'			=> 'locked',
 			'unlock'		=> 'unlocked',
-		),
-	),
-));
+		],
+	],
+]);

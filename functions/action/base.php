@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\functions\action;
+namespace rxu\topicactions\functions\action;
 
 /**
  * Topic action base class. Provides sensible defaults for topic actions,
@@ -16,7 +16,7 @@ namespace rxu\TopicActions\functions\action;
 abstract class base
 {
 	private $name;
-	private $errors = array();
+	private $errors = [];
 	public $success_lang_key = 'TOPIC_ACTION_PERFORMED';
 
 	/** @var string */
@@ -127,7 +127,7 @@ abstract class base
 			include($this->phpbb_root_path . 'includes/functions_mcp.' . $this->php_ext);
 		}
 
-		$data = phpbb_get_topic_data(array($topic_id));
+		$data = phpbb_get_topic_data([$topic_id]);
 
 		if (sizeof($data))
 		{

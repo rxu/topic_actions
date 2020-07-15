@@ -17,7 +17,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -32,7 +32,7 @@ if (empty($lang) || !is_array($lang))
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'SCHEDULE_TOPIC_ACTION'			=> 'Запланировать действие с темой',
 	'SELECT_ACTION'					=> 'Выбрать действие',
 	'DELETE_ACTION'					=> 'Удалить действие',
@@ -43,11 +43,11 @@ $lang = array_merge($lang, array(
 	'TOPIC_ACTION_DELETED'			=> 'Время действия с темой было удалено успешно.',
 	'NO_ACTION_SELECTED'			=> 'Не выбрано желаемое действие.',
 	'NO_TIME_SET'					=> 'Действие не было запланировано.',
-	'TOPIC_ACTION'	=> array(
+	'TOPIC_ACTION'	=> [
 		'NOT_ENOUGH_PARAMS'	=> 'Недостаточно параметров.',
 		'DELAY'				=> 'Время выполнения действия.',
 		'DELAY_EXPLAIN'		=> 'Тема запланирована к %1$s на время: %2$s',
-		'TIME'	=> array(
+		'TIME'	=> [
 			'0'  => 'Сейчас',
 			'1'  => 'через 1 день',
 			'3'  => 'через 3 дня',
@@ -55,8 +55,8 @@ $lang = array_merge($lang, array(
 			'7'  => 'через 7 дней',
 			'14' => 'через 2 недели',
 			'30' => 'через 1 месяц'
-		),
-		'TYPE'	=> array(
+		],
+		'TYPE'	=> [
 			'trash'			=> 'Поместить в корзину',
 			'trash_lock'	=> 'Закрыть сейчас и запланировать удаление в корзину',
 			'delete'		=> 'Удалить',
@@ -70,13 +70,13 @@ $lang = array_merge($lang, array(
 							'MAKE_NORMAL'	=> 'Сделать обычной'
 						)
 			*/
-		),
-		'TYPE_NOTICE'       => array(
+		],
+		'TYPE_NOTICE'       => [
 			'trash'      => 'удалению в корзину',
 			'trash_lock' => 'удалению в корзину',
 			'delete'     => 'удалению',
 			'lock'       => 'закрытию',
 			'unlock'     => 'открытию',
-		),
-	),
-));
+		],
+	],
+]);

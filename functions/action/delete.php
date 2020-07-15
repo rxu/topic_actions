@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\functions\action;
+namespace rxu\topicactions\functions\action;
 
 /**
  * Delete topic action.
@@ -81,11 +81,11 @@ class delete extends base
 				$this->user->ip,
 				'LOG_DELETE_SHADOW_TOPIC',
 				false,
-				array(
+				[
 					'forum_id'    => $row['forum_id'],
 					'topic_id'    => $topic_id,
 					'topic_title' => $row['topic_title'],
-				)
+				]
 			);
 		}
 		else
@@ -96,12 +96,12 @@ class delete extends base
 				$this->user->ip,
 				'LOG_DELETE_TOPIC',
 				false,
-				array(
+				[
 					'forum_id'                => $row['forum_id'],
 					'topic_id'                => $topic_id,
 					'topic_title'             => $row['topic_title'],
 					'topic_first_poster_name' => $row['topic_first_poster_name'],
-				)
+				]
 			);
 		}
 
@@ -109,7 +109,7 @@ class delete extends base
 		{
 			include($this->phpbb_root_path . 'includes/functions_admin.' . $this->php_ext);
 		}
-		$return = delete_topics('topic_id', array($topic_id));
+		$return = delete_topics('topic_id', [$topic_id]);
 
 		return (bool) $return['topics'];
 	}

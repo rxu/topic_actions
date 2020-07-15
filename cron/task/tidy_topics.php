@@ -7,12 +7,12 @@
  *
  */
 
-namespace rxu\TopicActions\cron\task;
+namespace rxu\topicactions\cron\task;
 
 /**
  * Tidy topics cron task.
  *
- * @package TopicActions
+ * @package topicactions
  */
 class tidy_topics extends \phpbb\cron\task\base
 {
@@ -25,10 +25,10 @@ class tidy_topics extends \phpbb\cron\task\base
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var \rxu\TopicActions\functions\scheduler */
+	/** @var \rxu\topicactions\functions\scheduler */
 	protected $scheduler;
 
-	/** @var \rxu\TopicActions\functions\manager */
+	/** @var \rxu\topicactions\functions\manager */
 	protected $manager;
 
 	/**
@@ -37,10 +37,10 @@ class tidy_topics extends \phpbb\cron\task\base
 	 * @param \phpbb\config\config                  $config
 	 * @param \phpbb\db\driver\driver_interface     $db
 	 * @param \phpbb\user                           $user
-	 * @param \rxu\TopicActions\functions\scheduler $scheduler
-	 * @param \rxu\TopicActions\functions\manager   $manager
+	 * @param \rxu\topicactions\functions\scheduler $scheduler
+	 * @param \rxu\topicactions\functions\manager   $manager
 	 */
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \rxu\TopicActions\functions\scheduler $scheduler, \rxu\TopicActions\functions\manager $manager)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \rxu\topicactions\functions\scheduler $scheduler, \rxu\topicactions\functions\manager $manager)
 	{
 		$this->config = $config;
 		$this->db = $db;
@@ -73,11 +73,11 @@ class tidy_topics extends \phpbb\cron\task\base
 		return $this->config['topics_last_gc'] < time() - $this->config['topics_gc'];
 	}
 
-	public function cron_tidy_topics($topic_ids = array())
+	public function cron_tidy_topics($topic_ids = [])
 	{
-		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
+		$this->user->add_lang_ext('rxu/topicactions', 'topic_actions');
 		$current_time = time();
-		$topics_list = array();
+		$topics_list = [];
 
 		$where_sql = (sizeof($topic_ids)) ? $this->db->sql_in_set('topic_id', $topic_ids) : 'topic_action_time <= ' . $current_time . ' AND topic_action_time > ' . (int) $this->config['topics_last_gc'];
 		$sql = 'SELECT forum_id, topic_id, topic_action_type FROM ' . TOPICS_TABLE . ' WHERE ' . $where_sql;

@@ -1,120 +1,120 @@
 services:
-    rxu.TopicActions.listener:
-        class: rxu\TopicActions\event\listener
+    rxu.topicactions.listener:
+        class: rxu\topicactions\event\listener
         arguments:
-            - @config
-            - @template
-            - @user
-            - @request
-            - @rxu.TopicActions.scheduler
-            - @rxu.TopicActions.manager
-            - %core.root_path%
-            - %core.php_ext%
+            - '@config'
+            - '@template'
+            - '@user'
+            - '@request'
+            - '@rxu.topicactions.scheduler'
+            - '@rxu.topicactions.manager'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         tags:
             - { name: event.listener }
 
-    rxu.TopicActions.cron.task.tidy_topics:
-        class: rxu\TopicActions\cron\task\tidy_topics
+    rxu.topicactions.cron.task.tidy_topics:
+        class: rxu\topicactions\cron\task\tidy_topics
         arguments:
-            - @config
-            - @dbal.conn
-            - @user
-            - @rxu.TopicActions.scheduler
-            - @rxu.TopicActions.manager
+            - '@config'
+            - '@dbal.conn'
+            - '@user'
+            - '@rxu.topicactions.scheduler'
+            - '@rxu.topicactions.manager'
         calls:
-            - [set_name, [cron.task.core.rxu_tidy_topics]]
+            - [set_name, ['cron.task.core.rxu_tidy_topics']]
         tags:
             - { name: cron.task }
 
-    rxu.TopicActions.scheduler:
-        class: rxu\TopicActions\functions\scheduler
+    rxu.topicactions.scheduler:
+        class: rxu\topicactions\functions\scheduler
         arguments:
-            - @dbal.conn
-            - @template
-            - @user
-            - @rxu.TopicActions.manager
+            - '@dbal.conn'
+            - '@template'
+            - '@user'
+            - '@rxu.topicactions.manager'
 
-    rxu.TopicActions.manager:
-        class: rxu\TopicActions\functions\manager
+    rxu.topicactions.manager:
+        class: rxu\topicactions\functions\manager
         arguments:
-            - @rxu.TopicActions.actions_collection
-            - @user
+            - '@rxu.topicactions.actions_collection'
+            - '@user'
 
 # ----- Topic actions -----
-    rxu.TopicActions.actions_collection:
+    rxu.topicactions.actions_collection:
         class: phpbb\di\service_collection
         arguments:
-            - @service_container
+            - '@service_container'
         tags:
-            - { name: service_collection, tag: rxu.TopicActions.action }
+            - { name: service_collection, tag: rxu.topicactions.action }
 
-    rxu.TopicActions.action.trash:
-        class: rxu\TopicActions\functions\action\trash
+    rxu.topicactions.action.trash:
+        class: rxu\topicactions\functions\action\trash
         arguments:
-            - @auth
-            - @content.visibility
-            - @log
-            - @user
-            - %core.root_path%
-            - %core.php_ext%
+            - '@auth'
+            - '@content.visibility'
+            - '@log'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         calls:
-            - [set_name, [trash]]
+            - [set_name, ['trash']]
         tags:
-            - { name: rxu.TopicActions.action }
+            - { name: rxu.topicactions.action }
 
-    rxu.TopicActions.action.trash_lock:
-        class: rxu\TopicActions\functions\action\trash_lock
+    rxu.topicactions.action.trash_lock:
+        class: rxu\topicactions\functions\action\trash_lock
         arguments:
-            - @auth
-            - @content.visibility
-            - @log
-            - @user
-            - @dbal.conn
-            - %core.root_path%
-            - %core.php_ext%
+            - '@auth'
+            - '@content.visibility'
+            - '@log'
+            - '@user'
+            - '@dbal.conn'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         calls:
-            - [set_name, [trash_lock]]
+            - [set_name, ['trash_lock']]
         tags:
-            - { name: rxu.TopicActions.action }
+            - { name: rxu.topicactions.action }
 
-    rxu.TopicActions.action.delete:
-        class: rxu\TopicActions\functions\action\delete
+    rxu.topicactions.action.delete:
+        class: rxu\topicactions\functions\action\delete
         arguments:
-            - @auth
-            - @content.visibility
-            - @log
-            - @user
-            - %core.root_path%
-            - %core.php_ext%
+            - '@auth'
+            - '@content.visibility'
+            - '@log'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         calls:
-            - [set_name, [delete]]
+            - [set_name, ['delete']]
         tags:
-            - { name: rxu.TopicActions.action }
+            - { name: rxu.topicactions.action }
 
-    rxu.TopicActions.action.lock:
-        class: rxu\TopicActions\functions\action\lock
+    rxu.topicactions.action.lock:
+        class: rxu\topicactions\functions\action\lock
         arguments:
-            - @auth
-            - @dbal.conn
-            - @log
-            - @user
-            - %core.root_path%
-            - %core.php_ext%
+            - '@auth'
+            - '@dbal.conn'
+            - '@log'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         calls:
-            - [set_name, [lock]]
+            - [set_name, ['lock']]
         tags:
-            - { name: rxu.TopicActions.action }
+            - { name: rxu.topicactions.action }
 
-    rxu.TopicActions.action.unlock:
-        class: rxu\TopicActions\functions\action\unlock
+    rxu.topicactions.action.unlock:
+        class: rxu\topicactions\functions\action\unlock
         arguments:
-            - @auth
-            - @dbal.conn
-            - @log
-            - @user
-            - %core.root_path%
-            - %core.php_ext%
+            - '@auth'
+            - '@dbal.conn'
+            - '@log'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         calls:
-            - [set_name, [unlock]]
+            - [set_name, ['unlock']]
         tags:
-            - { name: rxu.TopicActions.action }
+            - { name: rxu.topicactions.action }

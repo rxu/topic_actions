@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\functions\action;
+namespace rxu\topicactions\functions\action;
 
 /**
  * Trash topic action.
@@ -83,11 +83,11 @@ class trash_lock extends trash
 			$this->user->ip,
 			'LOG_LOCK',
 			false,
-			array(
+			[
 				'forum_id'    => $row['forum_id'],
 				'topic_id'    => $row['topic_id'],
 				'topic_title' => $row['topic_title'],
-			)
+			]
 		);
 		return true;
 	}

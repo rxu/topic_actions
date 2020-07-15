@@ -7,7 +7,7 @@
  *
  */
 
-namespace rxu\TopicActions\event;
+namespace rxu\topicactions\event;
 
 /**
  * Event listener
@@ -31,10 +31,10 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\request\request_interface */
 	protected $request;
 
-	/** @var \rxu\TopicActions\functions\scheduler */
+	/** @var \rxu\topicactions\functions\scheduler */
 	protected $scheduler;
 
-	/** @var \rxu\TopicActions\functions\manager */
+	/** @var \rxu\topicactions\functions\manager */
 	protected $manager;
 
 	/** @var string */
@@ -43,7 +43,7 @@ class listener implements EventSubscriberInterface
 	/** @var string */
 	protected $php_ext;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\request\request_interface $request, \rxu\TopicActions\functions\scheduler $scheduler, \rxu\TopicActions\functions\manager $manager, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\request\request_interface $request, \rxu\topicactions\functions\scheduler $scheduler, \rxu\topicactions\functions\manager $manager, $phpbb_root_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->template = $template;
@@ -58,14 +58,14 @@ class listener implements EventSubscriberInterface
 
 	static public function getSubscribedEvents()
 	{
-		return array(
+		return [
 			'core.modify_quickmod_options'     => 'action_type',
 			'core.modify_quickmod_actions'     => 'topic_action',
 			'core.viewtopic_modify_page_title' => 'template_assign_vars',
 			'core.viewforum_modify_topicrow'   => 'modify_icon_path_viewtopic',
 			'core.search_modify_tpl_ary'       => 'modify_icon_path_search',
 			'core.page_footer'                 => 'modify_header',
-		);
+		];
 	}
 
 	public function action_type($event)
@@ -84,8 +84,8 @@ class listener implements EventSubscriberInterface
 			return;
 		}
 
-		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
-		$this->user->add_lang(array('viewtopic'));
+		$this->user->add_lang_ext('rxu/topicactions', 'topic_actions');
+		$this->user->add_lang(['viewtopic']);
 
 		$forum_id = $this->request->variable('f', 0);
 		$topic_id = $this->request->variable('t', 0);
@@ -162,17 +162,17 @@ class listener implements EventSubscriberInterface
 		$forum_id = $event['forum_id'];
 		$topic_id = $topic_data['topic_id'];
 
-		$this->user->add_lang_ext('rxu/TopicActions', 'topic_actions');
+		$this->user->add_lang_ext('rxu/topicactions', 'topic_actions');
 
 		$action_select = $this->scheduler->topic_action_select($forum_id, $topic_id);
 		$action_select_time = ($action_select) ? $this->scheduler->topic_action_time_select() : false;
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'TOPIC_ACTION_FONTAWESOME' => $this->get_phpbb_branch() != '3.1',
 			'TOPIC_ACTION_SELECT'      => $action_select,
 			'TOPIC_ACTION_TIME_SELECT' => $action_select_time,
 			'TOPIC_ACTION_TIME'        => ($topic_data['topic_action_time'] && ($topic_data['topic_action_time'] > $this->config['topics_last_gc'])) ? sprintf($this->user->lang['TOPIC_ACTION']['DELAY_EXPLAIN'], $this->user->lang['TOPIC_ACTION']['TYPE_NOTICE'][$topic_data['topic_action_type']], $this->user->format_date($topic_data['topic_action_time'])) : '',
-		));
+		]);
 	}
 
 	private function get_phpbb_branch()
@@ -210,10 +210,10 @@ class listener implements EventSubscriberInterface
 	{
 		if ($this->flag)
 		{
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'T_ICONS_PATH'  => '',
 				'S_TOPIC_ICONS' => true,
-			));
+			]);
 		}
 	}
 }
