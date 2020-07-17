@@ -58,8 +58,9 @@ $lang = array_merge($lang, [
 		],
 		'TYPE'	=> [
 			'trash'			=> 'Soft delete',
-			'trash_lock'	=> 'Lock now and shedule soft delete',
+			'trash_lock'	=> 'Lock now and schedule soft delete',
 			'delete'		=> 'Delete',
+			'delete_lock'	=> 'Lock now and schedule permanent delete',
 			'lock'			=> 'Lock',
 			'unlock'		=> 'Unlock',
 			/*			'FORK'			=> 'Копировать',
@@ -75,6 +76,7 @@ $lang = array_merge($lang, [
 			'trash'			=> 'soft deleted',
 			'trash_lock'	=> 'soft deleted',
 			'delete'		=> 'deleted',
+			'delete_lock'	=> 'deleted',
 			'lock'			=> 'locked',
 			'unlock'		=> 'unlocked',
 		],

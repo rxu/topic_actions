@@ -91,6 +91,21 @@ services:
         tags:
             - { name: rxu.topicactions.action }
 
+    rxu.topicactions.action.delete_lock:
+        class: rxu\topicactions\functions\action\delete_lock
+        arguments:
+            - '@auth'
+            - '@content.visibility'
+            - '@log'
+            - '@user'
+            - '@dbal.conn'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        calls:
+            - [set_name, ['delete_lock']]
+        tags:
+            - { name: rxu.topicactions.action }
+
     rxu.topicactions.action.lock:
         class: rxu\topicactions\functions\action\lock
         arguments:
