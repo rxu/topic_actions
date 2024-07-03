@@ -51,8 +51,8 @@ class topic_actions_test extends \phpbb_functional_test_case
 		// Get a topic
 		$this->get_db();
 		$sql = 'SELECT topic_id FROM ' . TOPICS_TABLE . "
-			ORDER BY topic_id DESC LIMIT 1";
-		$result = $this->db->sql_query($sql);
+			ORDER BY topic_id DESC";
+		$result = $this->db->sql_query_limit($sql, 1);
 		$topic_id = (string) $this->db->sql_fetchfield('topic_id');
 		$this->db->sql_freeresult($result);
 
